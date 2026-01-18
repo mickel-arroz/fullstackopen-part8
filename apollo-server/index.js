@@ -46,6 +46,10 @@ const resolvers = {
     allPersons: () => persons,
     findPerson: (root, args) => persons.find((p) => p.name === args.name),
   },
+  Person: {
+    street: (root) => 'Manhattan',
+    city: (root) => 'New York',
+  },
 };
 
 const server = new ApolloServer({
