@@ -46,6 +46,7 @@ const Persons = ({ persons }) => {
 }
 
 const App = () => {
+  const [errorMessage, setErrorMessage] = useState(null)
   const result = useQuery(ALL_PERSONS, 
     {
       refetchQueries: [ { query: ALL_PERSONS } ]
@@ -56,14 +57,31 @@ const App = () => {
     return <div>loading...</div>
   }
 
-  if (result.error) {
-    return <div style={{color: 'red'}}>{result.error.message}</div>
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 10000)
   }
 
   return <>
+      <Notify errorMessage={errorMessage} />
     <Persons persons={result.data?.allPersons || []} />
-    <PersonForm />
+    <PersonForm notify={notify} />
   </>
+}
+
+const Notify = ({errorMessage}) => {
+  if ( !errorMessage ) {
+    return null
+  }
+  return (
+    <div style={{
+      color: 'red',
+    }}>
+    {errorMessage}
+    </div>
+  )
 }
 
 export default App
