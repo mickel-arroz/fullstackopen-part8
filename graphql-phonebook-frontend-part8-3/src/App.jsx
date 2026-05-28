@@ -1,31 +1,9 @@
-import { gql } from "@apollo/client"
 import { useQuery, useLazyQuery } from "@apollo/client/react"
 import { useEffect, useState } from "react"
 import PersonForm from "./components/PersonForm"
+import { ALL_PERSONS, FIND_PERSON } from "./queries"
 
-const ALL_PERSONS = gql`
-  query {
-    allPersons {
-      name
-      phone
-      id
-    }
-  }
-`
 
-const FIND_PERSON = gql`
-  query findPersonByName($nameToSearch: String!) {
-    findPerson(name: $nameToSearch) {
-      name
-      phone 
-      id
-      address {
-        street
-        city
-      }
-    }
-  }
-`
 
 const Persons = ({ persons }) => {
   const [getPerson, result] = useLazyQuery(FIND_PERSON) 
@@ -68,7 +46,11 @@ const Persons = ({ persons }) => {
 }
 
 const App = () => {
-  const result = useQuery(ALL_PERSONS)
+  const result = useQuery(ALL_PERSONS, 
+    {
+      refetchQueries: [ { query: ALL_PERSONS } ]
+  }
+  )
 
   if (result.loading) {
     return <div>loading...</div>
