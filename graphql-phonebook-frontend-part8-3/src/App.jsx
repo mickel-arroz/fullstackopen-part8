@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client"
 import { useQuery, useLazyQuery } from "@apollo/client/react"
 import { useEffect, useState } from "react"
+import PersonForm from "./components/PersonForm"
 
 const ALL_PERSONS = gql`
   query {
@@ -77,9 +78,10 @@ const App = () => {
     return <div style={{color: 'red'}}>{result.error.message}</div>
   }
 
-  return (
+  return <>
     <Persons persons={result.data?.allPersons || []} />
-  )
+    <PersonForm />
+  </>
 }
 
 export default App
